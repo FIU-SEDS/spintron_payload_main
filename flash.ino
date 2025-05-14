@@ -11,7 +11,7 @@ void setupFlash() {
   esp_err_t err = nvs_open("namespace", NVS_READWRITE, &nvsHandle);
 
 forceMultiplier = getForceMultiplier();
-forceOffset += getForceOffset();
+forceOffset = getForceOffset();
 
 //   nvs_set_str(nvsHandle, "test", "Hello World!");
 //   nvs_commit(nvsHandle);

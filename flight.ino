@@ -38,6 +38,7 @@ void loopFlight() {
     Serial.println("Entering apogee");
 
     prevIsInApogee = true;
+    setupMainLoopFlight();
 
     // Exiting apogee
   } else if (prevIsInApogee && !isInApogee()) {
