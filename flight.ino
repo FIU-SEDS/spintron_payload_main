@@ -2,6 +2,10 @@ bool isInFlight = false;
 bool prevIsInApogee = false;
 
 bool firstEnteringMainLoopFlight = true;
+uint32_t apogeeStartTime = -1;
+
+const uint32_t APOGEE_TIME = 45000;
+bool doneApogee = false;
 
 void setupFlight() {
 
@@ -10,10 +14,10 @@ void setupFlight() {
     delay(1000);
   };
 
-  while (setupAccelerometer()) {
-    Serial.println("Accelerometer setup failed, retrying...");
-    delay(1000);
-  };
+  // while (setupAccelerometer()) {
+  //   Serial.println("Accelerometer setup failed, retrying...");
+  //   delay(1000);
+  // };
 
   setupMotor(); // This cannot fail
   Serial.println("Setup payload motor");
@@ -33,23 +37,27 @@ void loopFlight() {
     }
   }
 
+  if (doneApogee) return;
+
   // Entering apogee
   if (!prevIsInApogee && isInApogee()) {
     Serial.println("Entering apogee");
 
     prevIsInApogee = true;
     setupMainLoopFlight();
+    apogeeStartTime = millis();
 
     // Exiting apogee
-  } else if (prevIsInApogee && !isInApogee()) {
+  } else if (prevIsInApogee && (millis() - apogeeStartTime) >= APOGEE_TIME) {
     Serial.println("Exiting apogee");
 
     prevIsInApogee = false;
+    doneApogee = true;
+    return;
 
     // Not in apogee
-  } else if (!isInApogee()) {
-    return;
+  } else if (prevIsInApogee) {
+    mainLoopFlight();
   }
 
-  mainLoopFlight();
 }

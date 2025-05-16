@@ -5,7 +5,7 @@
 /**
  * Threshold for the IMU to consider the device starting apogee
  */
-const double STARTING_IMU_THRESH = 0.20;
+const double STARTING_IMU_THRESH = 2 * 9.81;
 
 /** Threshold for the IMU to consider the device ending apogee
  * device in apogee
@@ -34,7 +34,7 @@ bool isIMUApogee()
 
   float totalAccMag = imuAccelerationMagMovingAvg();
 
-  return totalAccMag < STARTING_IMU_THRESH && totalAccMag > ENDING_IMU_THRESH;
+  return totalAccMag < STARTING_IMU_THRESH;
 }
 
 /**
@@ -49,10 +49,10 @@ bool isAcceloAppoge()
 
   float totalAccMag = AccMagMovingAvg();
 
-  return totalAccMag < STARTING_ACC_THRESH && totalAccMag > ENDING_ACC_THRESH;
+  return totalAccMag < STARTING_ACC_THRESH;
 }
 
 bool isInApogee()
 {
-  return isAcceloAppoge() && isIMUApogee();
+  return isIMUApogee();
 }

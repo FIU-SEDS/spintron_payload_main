@@ -6,10 +6,10 @@
 #define IMU_GYRO_RANGE MPU6050_RANGE_500_DEG
 #define IMU_REFRESH_RATE MPU6050_BAND_21_HZ
 
-#define IMU_MOVING_AVG_WINDOW_SIZE 3
+#define IMU_MOVING_AVG_WINDOW_SIZE 5
 
-using DoubleTuple = std::tuple<double, double, double>;
-std::queue<DoubleTuple> imuDataQueue;
+// using DoubleTuple = std::tuple<double, double, double>;
+std::queue<double> imuDataQueue;
 
 Adafruit_MPU6050 mpu;
 sensors_event_t a, g, temp;
@@ -18,7 +18,7 @@ void updateIMU() {
   mpu.getEvent(&a, &g, &temp);
 
   // Store the IMU data in a queue
-  imuDataQueue.push(std::make_tuple(getIMUXAcc(), getIMUYAcc(), getIMUZAcc()));
+  imuDataQueue.push(getIMUAccelerationMagnitude());
 
   if (imuDataQueue.size() > IMU_MOVING_AVG_WINDOW_SIZE) {
     imuDataQueue.pop();
@@ -38,7 +38,7 @@ double getIMUXAcc()
  */
 double getIMUYAcc()
 {
-  return a.acceleration.y * 100;
+  return a.acceleration.y;
 }
 
 /**
@@ -119,22 +119,17 @@ float getIMUAccelerationMagnitude()
  */
 double imuAccelerationMagMovingAvg() {
   // Calculate the moving average
-  if (imuDataQueue.empty()) {
+  if (imuDataQueue.empty() || imuDataQueue.size() != IMU_MOVING_AVG_WINDOW_SIZE) {
     return 0.0;
   }
 
   double sum = 0.0;
 
-  std::queue<DoubleTuple> tempQueue = accDataQueue; // Create a copy
+  std::queue<double> tempQueue = imuDataQueue; // Create a copy
 
-  while (!accDataQueue.empty()) {
-    DoubleTuple value = tempQueue.front(); // Get the front element
-    double x = std::get<0>(value);
-    double y = std::get<1>(value);
-    double z = std::get<2>(value);
-
-    sum += sqrt(x * x + y * y + z * z);
-
+  while (!tempQueue.empty()) {
+    double mag = tempQueue.front(); // Get the front element
+    sum += mag;
     tempQueue.pop(); // Remove the front element from the copy
   }
 

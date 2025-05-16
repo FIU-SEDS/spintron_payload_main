@@ -5,7 +5,7 @@
 /**
  * Threshold for the IMU to consider the device starting apogee
  */
-const double SFLIGHT_IMU_THRESH = 4;
+const double SFLIGHT_IMU_THRESH = 4 * 9.81;
 
 /**
  * Threshold for the IMU to consider the device starting apogee
@@ -24,6 +24,8 @@ bool isIMUInFlight()
   updateIMU();
 
   float totalAccMag = imuAccelerationMagMovingAvg();
+  // Serial.print("imu mag");
+  // Serial.println(totalAccMag);
 
   return totalAccMag > SFLIGHT_IMU_THRESH;
 }
@@ -45,5 +47,5 @@ bool isAcceloInFlight()
 
 bool checkIsInFlight()
 {
-  return isIMUInFlight() && isAcceloInFlight();
+  return isIMUInFlight();
 }

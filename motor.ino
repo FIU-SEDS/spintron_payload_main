@@ -1,4 +1,4 @@
-const int MOTOR_PIN = 9;
+const int MOTOR_PIN = 3;
 
 const int MOTOR_SPEED = 300; // Maximum speed (4095)
 
