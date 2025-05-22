@@ -8,5 +8,8 @@ The software is split into 2 parts a spin subsystem and a main subsystem. The ma
 2. Processes the data, and saves it to a CSV file on the SD card.
 3. Determines when to start the activation of the subsystem based on the acceleration data.
 
-
 The software is built and tested using the Ardiuno IDE on a ESP 32 S3 board.
+
+## Wiring Diagram
+
+![Wiring Diagram](./assets/wiring.png)
