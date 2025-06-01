@@ -4,7 +4,7 @@ bool prevIsInApogee = false;
 bool firstEnteringMainLoopFlight = true;
 uint32_t apogeeStartTime = -1;
 
-const uint32_t APOGEE_TIME = 45000;
+const uint32_t APOGEE_TIME = 20000;
 bool doneApogee = false;
 
 void setupFlight() {
@@ -53,6 +53,7 @@ void loopFlight() {
 
     prevIsInApogee = false;
     doneApogee = true;
+    turnOffMotor();
     return;
 
     // Not in apogee
