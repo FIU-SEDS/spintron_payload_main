@@ -4,7 +4,10 @@ bool prevIsInApogee = false;
 bool firstEnteringMainLoopFlight = true;
 uint32_t apogeeStartTime = -1;
 
-const uint32_t APOGEE_TIME = 20000;
+const uint32_t APOGEE_TIME = 12 * 1000;
+
+const uint32_t FLIGHT_TIME_TILL_APOGEE = (24 - 4) * 1000;
+uint32_t flightStartTime = -1;
 bool doneApogee = false;
 
 void setupFlight() {
@@ -32,6 +35,7 @@ void loopFlight() {
     if (checkIsInFlight()) {
       Serial.println("Entering flight");
       isInFlight = true;
+      flightStartTime = millis();
     } else {
       return;
     }
@@ -39,8 +43,8 @@ void loopFlight() {
 
   if (doneApogee) return;
 
-  // Entering apogee
-  if (!prevIsInApogee && isInApogee()) {
+  // Entering apogee by checking time
+  if (!prevIsInApogee && (millis() - flightStartTime) >= FLIGHT_TIME_TILL_APOGEE ) {
     Serial.println("Entering apogee");
 
     prevIsInApogee = true;
