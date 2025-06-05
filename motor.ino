@@ -2,7 +2,7 @@ const int MOTOR_PIN_1 = 3;
 const int MOTOR_PIN_2 = 46;
 const int MOTOR_PIN_PWM = 9;
 
-const int MOTOR_SPEED = 300; // Maximum speed (4095)
+const int MOTOR_SPEED = 150; // Maximum speed (255)
 
 void setupMotor() {
   pinMode(MOTOR_PIN_1, OUTPUT);
