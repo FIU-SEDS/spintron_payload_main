@@ -20,6 +20,8 @@ void setupCalibration() {
   pinMode(CALI_FOFFSET_UP, INPUT_PULLDOWN);
   pinMode(CALI_FOFSSET_DOWN, INPUT_PULLDOWN);
 
+  turnOnMotor();
+
   // display.clearDisplay();
 
   display.write("\n");
